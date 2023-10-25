@@ -1,10 +1,8 @@
 SRC_DIR := src
 URL := https://github.com/neovim/neovim/releases/latest/download/nvim-$(ENV).tar.gz
+CONFIG_DIR := config/nvim
 
-# Targets
-.PHONY: all clean download unpack run
-
-all: | $(SRC_DIR) download unpack run
+all: | $(SRC_DIR) download unpack download-config run
 
 $(SRC_DIR):
 	mkdir -p $(SRC_DIR)
@@ -22,4 +20,16 @@ run:
 clean:
 	rm -rf $(SRC_DIR)
 	rm -rf packer
+
+download-config:
+ifdef REPO_URL
+	@echo "Downloading Neovim configuration files from $(REPO_URL)..."
+	@rm -rf $(CONFIG_DIR)/*
+	@git clone $(REPO_URL) $(CONFIG_DIR)/
+else
+	@echo "No REPO_URL specified. Skipping download-config."
+endif
+
+# Targets
+.PHONY: all clean download unpack run download-config
 
