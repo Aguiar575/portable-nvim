@@ -112,16 +112,21 @@ Certainly! Here's a Markdown documentation for the optional Neovim configuration
 
 # Neovim Configuration Management
 
-This makefile provides functionality to manage Neovim configuration files, allowing users to download their own configuration files.
+This tool provides functionality to manage Neovim configuration files, allowing users to download their own configuration files.
 
 ## Download Neovim Configuration
 
 This feature is optional, and users can provide the repository URL using the `REPO_URL` parameter. If no URL is provided, the download will be skipped.
 
-### Usage
+### Using Makefile
 
 ```bash
 make ENV=your-env REPO_URL=https://github.com/example/nvim-config.git
+```
+### Using Bash Script
+
+```bash
+bash portable-nvim.sh https://github.com/example/nvim-config.git
 ```
 
 This command downloads the Neovim configuration files from the specified repository.
