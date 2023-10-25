@@ -57,9 +57,53 @@ To clean up the installation and remove downloaded files, you can use the provid
 ```bash
 make clean
 ```
-
 ### Using Bash Script
 
 ```bash
 bash clean_neovim.sh
+```
+
+# Neovim Portable Configuration
+
+The following configuration is designed to keep Neovim and its dependencies contained within the project folder. This approach ensures portability across different environments while maintaining a consistent setup. It prevents interference with the global Neovim installation on the system.
+
+## Directory Setup
+
+The script begins by obtaining the current working directory using the `pwd` command. This directory is then used as the root for the Packer plugin manager and the location where Packer will be installed.
+
+```lua
+local current_working_dir = vim.fn.system('pwd')
+current_working_dir = current_working_dir:gsub('\n', '')
+```
+
+## Packer Plugin Manager Setup
+
+Packer is used as the plugin manager in this configuration. The script defines the root directory for Packer plugins and the path where Packer itself will be installed.
+
+```lua
+local packer_package_root = current_working_dir..'/packer/site/pack/'
+local packer_path = current_working_dir..'/packer/opt/packer.nvim'
+vim.o.packpath = packer_path..vim.o.packpath
+```
+
+## Packer Installation
+
+If Packer is not already installed, the script clones it from the [official GitHub repository](https://github.com/wbthomason/packer.nvim).
+
+```lua
+if vim.fn.empty(vim.fn.glob(packer_path)) > 0 then
+    vim.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', packer_path})
+end
+```
+
+## Packer Initialization
+
+The script initializes and configures Packer with the desired paths for plugin management.
+
+```lua
+vim.cmd [[packadd packer.nvim]]
+require('packer').init({
+    compile_path = current_working_dir..'/packer/plugin/packer_compiled.lua',
+    package_root = packer_package_root
+})
 ```
